@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types'
 import {ListView, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import {actions} from './const';
 
@@ -69,6 +70,14 @@ export default class RichTextToolbar extends Component {
       editor.registerToolbar((selectedItems) => this.setSelectedItems(selectedItems));
       this.setState({editor});
     }
+
+    setTimeout(() => {
+      var { listView } = this.refs;
+      if (listView) {
+        let listViewScrollView = listView.getScrollResponder();
+        listViewScrollView.scrollTo({x: 5, y: 5, animated: true});
+      }
+    }, 0);
   }
 
   setSelectedItems(selectedItems) {
@@ -126,9 +135,11 @@ export default class RichTextToolbar extends Component {
           style={[{height: 50, backgroundColor: '#D3D3D3', alignItems: 'center'}, this.props.style]}
       >
         <ListView
+            ref={'listView'}
             horizontal
             contentContainerStyle={{flexDirection: 'row'}}
             dataSource={this.state.ds}
+            enableEmptySections={true}
             renderRow= {(row) => this._renderAction(row.action, row.selected)}
         />
       </View>
